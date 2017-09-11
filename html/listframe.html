@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+      <title>title</title>
+      <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+      <style>
+      body{
+        background-color: #eee;
+      }
+      ul{
+        margin-bottom:80px;
+
+      }
+      li{
+        margin-top:10px;
+        padding:10px;
+        background: white;
+        border-bottom:2px solid #ccc;
+        margin-bottom:10px;
+      }
+      li img{
+        width:100%;
+
+      }
+      li .title{
+        line-height: 1.5;
+        font-size:16px;
+        margin-bottom:5px;
+      }
+      li .content{
+        font-size:14px;
+      }
+      li .date{
+        font-size:12px;
+        text-align: right;
+      }
+      [v-cloak] {
+      display: none;
+      }
+      </style>
+  </head>
+  <body>
+    <div id="list" v-cloak>
+    <ul>
+      <li  v-for="item in list" @click="inner(item.title,item.text,item.textInfo,item.imgUrl)" >
+      <p class="title" >{{item.title}}</p>
+      <div class="thumb">
+        <img v-bind:src="item.imgUrl"/>
+      </div>
+      <p class="content">{{item.text.substring(0,100)}}</p>
+      <p class="date">{{item.textInfo}}</p>
+      </li>
+    </ul>
+    </div>
+
+  </body>
+  <script type="text/javascript" src="../script/api.js"></script>
+  <script type="text/javascript" src="../script/vue.js"></script>
+  <script type="text/javascript">
+  apiready = function(){
+      var UILoading = api.require('UILoading');
+      var typeParams
+        switch (api.pageParam.category)
+    {
+      case "文化":
+        typeParams="culture"
+        break;
+      case "讯息":
+        typeParams="Information"
+        break;
+      case "投资":
+        typeParams="invest"
+        break;
+      case "商户":
+        typeParams="merchant"
+        break;
+      case "学习":
+        typeParams="study"
+        break;
+      case "食材":
+        typeParams="metial"
+        break;
+      case "人物":
+        typeParams="person"
+        break;
+      case "专题":
+        typeParams="special"
+        break;
+
+      }
+    var app = new Vue({
+        el: '#list',
+        data: {
+          list: []
+        },
+        created:function(){
+          var that=this
+          UILoading.keyFrame({
+            rect: {
+                w: 80,
+                h: 100
+            },
+            styles: {
+                bg: 'rgba(0,0,0,0.5)',
+                corner: 5,
+                interval: 50,
+                frame: {
+                    w: 80,
+                    h: 80
+                }
+            }
+        });
+          api.setCustomRefreshHeaderInfo({
+              bgColor: '#eee',
+              tips: {
+                  pull: '下拉刷新',
+                  threshold: '松开立即刷新',
+                  load: '正在刷新'
+              }
+          }, function() {
+                      api.ajax({
+                      url: 'https://mock.kuaiyunma.com/mock/59af98f0fdd5ac0c4f4afe9b/example/'+typeParams+'#!method=get',
+                      method: 'get',
+                      async: false,
+                      report:true,
+                  },function(ret, err){
+                    that.list=[]
+                          that.list=ret
+                          api.refreshHeaderLoadDone()
+                  });
+          });
+                api.ajax({
+                url: 'https://mock.kuaiyunma.com/mock/59af98f0fdd5ac0c4f4afe9b/example/'+typeParams+'#!method=get',
+                method: 'get',
+                async: false,
+                report:true,
+            },function(ret, err){
+                    that.list=[]
+                    that.list=ret
+                    UILoading.closeKeyFrame();
+
+            });
+        },
+        methods:{
+          inner:function(title,text,info,imgUrl){
+              api.openWin({
+                  name: 'content',
+                  url: '../html/content.html',
+                  pageParam: {
+                      title: title,
+                      text:text,
+                      info:info,
+                      imgUrl:imgUrl
+                  }
+              });
+
+          }
+
+        }
+      })
+  };
+  </script>
+  </html>

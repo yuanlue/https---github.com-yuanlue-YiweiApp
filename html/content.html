@@ -1,0 +1,79 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+</head>
+<style>
+header{
+  width:100%;
+  top:0;
+  position: fixed;
+  height:50px;
+  background-color:#ff7b10;
+}
+header h1{
+  color:white;
+  text-align: center;
+  line-height: 50px;
+  font-size:16px;
+}
+header img{
+  position: absolute;
+
+  margin-top: 10px;
+  width:30px;
+}
+.content .title{
+  font-size: 18px
+}
+.content .inner{
+  font-size: 15px;
+  margin-top:10px;
+}
+.content .textinfo{
+  font-size: 15px;
+  margin-top:10px;
+}
+</style>
+<body >
+
+    <header onclick="api.closeWin()">
+        <img src="../image/return.png" alt="">
+        <h1>壹味咨询</h1>
+    </header>
+
+
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+
+<script type="text/javascript">
+    apiready = function(){
+      api.openFrame({
+          name: 'contentframe',
+          url: '../html/contentFrame.html',
+          rect: {
+              x: 0,
+              y: 50,
+              w: 'auto',
+              h: api.winHeight-50
+          },
+          pageParam: {
+              title: api.pageParam.title,
+              text:api.pageParam.text,
+              info:api.pageParam.info,
+              imgUrl:api.pageParam.imgUrl
+          },
+          bounces: false,
+          bgColor: 'rgba(0,0,0,0)',
+          vScrollBarEnabled: true,
+          hScrollBarEnabled: true
+      });
+
+
+    };
+</script>
+</html>

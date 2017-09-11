@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,initial-scale=1.0,width=device-width"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="./css/api.css" />
+    <style type="text/css">
+    html,body{
+        height: 100%;
+    }
+
+  header{
+    height:50px;
+    background-color:#ff7b10;
+  }
+  header h1{
+    color:white;
+    text-align: center;
+    line-height: 50px;
+    font-size:16px;
+  }
+    </style>
+</head>
+<body id="#app">
+  <header>
+      <h1>壹味咨询</h1>
+  </header>
+</body>
+<script type="text/javascript" src="./script/api.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+
+
+		//输出Log，Log将显示在APICloud Studio控制台
+  var NVTabBar = api.require('NVTabBar');
+  fullwidth=api.screenWidth
+
+  function changeNavPage(page){
+    api.openFrame({
+        name: page,
+           bounces: true,
+        url: './html/'+page+'.html',
+        bounces:false,
+        rect: {
+            x: 0,
+            y: 50,
+            w: 'auto',
+            h: api.winHeight-115
+        },
+        pageParam: {
+            name: 'test'
+        },
+        bgColor: 'rgba(0,0,0,0)',
+        vScrollBarEnabled: true,
+        hScrollBarEnabled: true
+    });
+  }
+  api.openFrame({
+      name: 'home',
+      url: './html/main.html',
+      rect: {
+          x: 0,
+          y: 50,
+          w: 'auto',
+          h: 'auto'
+      },
+      pageParam: {
+          name: 'test'
+      },
+      bounces: true,
+      bgColor: 'rgba(0,0,0,0)',
+      vScrollBarEnabled: true,
+      hScrollBarEnabled: true
+  });
+
+  NVTabBar.open({
+      styles: {
+          bg: '#ff7b10',
+          //bg:"widget://image/NVTabBar/tabbar_bg.png",
+          h: 65,
+          dividingLine: {
+              width: 0,
+              color: '#000'
+          },
+          badge: {
+              bgColor: '#ff7b10',
+              numColor: '#fff',
+              size: 6.0,
+              centerX: 40,
+              centerY: 6
+          }
+      },
+      items: [ {
+          w: api.winWidth / 3.0,
+          bg: {
+              marginB: 0,
+          },
+          iconRect: {
+              w: 25.0,
+              h: 25.0,
+          },
+          icon: {
+              normal: 'widget://image/home_active.png',
+              selected: 'widget://image/home.png'
+          },
+          title: {
+              text: '首页',
+              size: 16.0,
+              normal:"#fff",
+              selected: '#000'  ,
+              marginB: 6.0
+          }
+      }, {
+          w: api.winWidth / 3.0,
+          bg: {
+              marginB: 0,
+          },
+          iconRect: {
+              w: 25.0,
+              h: 25.0,
+          },
+          icon: {
+              normal: 'widget://image/list_active.png',
+              selected: 'widget://image/list.png'
+          },
+          title: {
+              text: '咨询',
+              size: 16.0,
+              normal:"#fff",
+              selected: '#000'  ,
+              marginB: 6.0
+          }
+      }, {
+          w: api.winWidth / 3.0,
+          bg: {
+              marginB: 0,
+          },
+          iconRect: {
+              w: 25.0,
+              h: 25.0,
+          },
+          icon: {
+              normal: 'widget://image/user_active.png',
+              selected: 'widget://image/user.png'
+          },
+          title: {
+              text: '关于我们',
+              size: 16.0,
+              normal:"#fff",
+              selected: '#000'  ,
+              marginB: 6.0
+          }
+      }],
+      selectedIndex: 0
+  }, function(ret, err) {
+      if(ret.index==0){
+        api.closeFrame({
+            name: 'listtype'
+        });
+        api.closeFrame({
+            name: 'mine'
+        });
+        api.bringFrameToFront({
+            from: 'page1',
+            to: 'page2'
+        });
+        api.openFrame({
+            name: 'home',
+            url: './html/main.html',
+            customRefreshHeader: 'UIPullRefreshMotive',
+            rect: {
+                x: 0,
+                y: 50,
+                w: 'auto',
+                  h: api.winHeight-115
+            },
+            pageParam: {
+                name: 'test'
+            },
+            bounces: true,
+            bgColor: 'rgba(0,0,0,0)',
+            vScrollBarEnabled: true,
+            hScrollBarEnabled: true,
+            reload:false
+        });
+      }
+      if(ret.index==1){
+
+
+          changeNavPage('listtype')
+
+      }
+      if(ret.index==2){
+
+
+          changeNavPage('mine')
+
+      }
+
+  });
+    };
+</script>
+</html>

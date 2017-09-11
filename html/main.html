@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+</head>
+<style>
+    body{
+      background-color: #eee;
+    }
+    header{
+      margin-top:200px;
+      background: linear-gradient(to right,#ff7b10, #efc210);
+      color:white;
+      padding:5px 10px;
+    }
+    ul{
+      margin-bottom:80px;
+    }
+    li{
+      padding:10px;
+      background: white;
+      margin-bottom:10px;
+      border-bottom:2px solid #ccc;
+
+    }
+    li img{
+      width:100%;
+
+    }
+    li .title{
+      line-height: 1.5;
+      font-size:16px;
+      margin-bottom:5px;
+    }
+    li .content{
+      font-size:14px;
+    }
+    li .date{
+      font-size:12px;
+      text-align: right;
+    }
+    [v-cloak] {
+  display: none;
+}
+</style>
+<body >
+  <div id="app" v-cloak>
+  <header>热门推荐</header>
+  <ul>
+    <li  v-for="item in list" @click="inner(item.title,item.text,item.info,item.imgUrl)" >
+    <p class="title" >{{item.title}}</p>
+    <div class="thumb">
+      <img v-bind:src="item.imgUrl"/>
+    </div>
+    <p class="content">{{item.text.substring(0,100)}}</p>
+    <p class="date">{{item.textInfo}}</p>
+    </li>
+  </ul>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+<script type="text/javascript">
+    apiready = function(){
+      var loadingLabel = api.require('loadingLabel');
+      var app = new Vue({
+          el: '#app',
+          data: {
+            list: []
+          },
+          created:function(){
+            var that=this
+      api.setCustomRefreshHeaderInfo({
+          bgColor: '#eee',
+          tips: {
+              pull: '下拉刷新',
+              threshold: '松开立即刷新',
+              load: '正在刷新'
+          }
+      }, function() {
+
+                  api.ajax({
+                  url: 'https://mock.kuaiyunma.com/mock/59af98f0fdd5ac0c4f4afe9b/example/Information#!method=get',
+                  method: 'get',
+                  async: false,
+                  report:true,
+              },function(ret, err){
+                that.list=[]
+                      that.list=ret
+                      api.refreshHeaderLoadDone()
+              });
+      });
+      var UILoading = api.require('UILoading');
+        UILoading.keyFrame({
+          rect: {
+              w: 80,
+              h: 100
+          },
+          styles: {
+              bg: 'rgba(0,0,0,0.5)',
+              corner: 5,
+              interval: 50,
+              frame: {
+                  w: 80,
+                  h: 80
+              }
+          }
+      });
+            api.ajax({
+                url: 'https://mock.kuaiyunma.com/mock/59af98f0fdd5ac0c4f4afe9b/example/Information#!method=get',
+                method: 'get',
+                async: false,
+                report:true,
+            },function(ret, err){
+              that.list=ret
+                UILoading.closeKeyFrame ()
+            });
+
+          },
+          methods:{
+            inner:function(title,text,info,imgUrl){
+                api.openWin({
+                    name: 'content',
+                    url: '../html/content.html',
+                    pageParam: {
+                        title: title,
+                        text:text,
+                        info:info,
+                        imgUrl:imgUrl
+                    }
+                });
+
+            }
+          }
+        })
+
+
+      var UIScrollPicture = api.require('UIScrollPicture');
+      UIScrollPicture.open({
+        customRefreshHeader: 'UIPullRefreshMotive',
+          rect: {
+              x: 0,
+              y: 0,
+              w: api.winWidth,
+              h: 200
+          },
+          data: {
+              paths: [
+                  'widget://image/food3.jpeg',
+                  'widget://image/food3.jpeg',
+                  'widget://image/food3.jpeg',
+              ],
+
+          },
+          styles: {
+              caption: {
+                  height: 35,
+                  color: '#E0FFFF',
+                  size: 13,
+                  bgColor: '#696969',
+                  position: 'bottom'
+              },
+              indicator: {
+                  align: 'center',
+                  color: '#FFFFFF',
+                  activeColor: '#DA70D6'
+              }
+          },
+          placeholderImg: 'widget://res/slide1.jpg',
+          contentMode: 'scaleToFill',
+          interval: 3,
+          fixedOn: api.frameName,
+          loop: true,
+          fixed: false
+      }, function(ret, err) {
+
+      });
+    };
+</script>
+</html>

@@ -1,0 +1,87 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, initial-scale=1.0, width=device-width"/>
+    <meta name="format-detection" content="telephone=no, email=no, date=no, address=no">
+    <title>Hello APP</title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css" />
+</head>
+<style>
+[v-cloak] {
+display: none;
+}
+ul li{
+  padding:10px;
+  margin-top:5px;
+  line-height: 22px;
+  box-shadow: 0 1px 1px #eee;
+}
+ul li img{
+  float: right;
+
+  width:30px;
+  vertical-align: middle;
+}
+</style>
+<body >
+  <div id="category" v-cloak>
+  <ul>
+    <li v-for="item in list" @click="content(item.category)" >{{item.category}}<img src="../image/more.png"/></li>
+  </ul>
+  </div>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.js"></script>
+
+<script type="text/javascript">
+    apiready = function(){
+      var UILoading = api.require('UILoading');
+      var app = new Vue({
+          el: '#category',
+          data: {
+            list: []
+          },
+          created:function(){
+            var that=this
+            UILoading.keyFrame({
+              rect: {
+                  w: 80,
+                  h: 100
+              },
+              styles: {
+                  bg: 'rgba(0,0,0,0.5)',
+                  corner: 5,
+                  interval: 50,
+                  frame: {
+                      w: 80,
+                      h: 80
+                  }
+              }
+          });
+                  api.ajax({
+                  url: 'https://mock.kuaiyunma.com/mock/59af98f0fdd5ac0c4f4afe9b/example/category#!method=get',
+                  method: 'get',
+                  async: false,
+                  report:true,
+              },function(ret, err){
+                  UILoading.closeKeyFrame ()
+                      that.list=[]
+                      that.list=ret
+              });
+          },
+          methods:{
+            content:function(id){
+              api.openWin({
+                  name: 'list',
+                  url: '../html/list.html',
+                  pageParam: {
+                      category: id
+                  }
+              });
+
+            }
+          }
+        })
+    };
+</script>
+</html>
